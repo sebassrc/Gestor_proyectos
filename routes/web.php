@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/proyectos/{proyecto}', [ProyectoController::class, 'destroy'])->name('proyectos.destroy');
     Route::put('/proyectos/{proyecto}', [ProyectoController::class, 'update'])->name('proyectos.update');
     Route::get('/proyectos/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('proyectos.edit');
-    Route::get('/proyectos/{id}/download', 'ProyectoController@download')->name('proyectos.download');
+    Route::get('/proyectos/{id}/download', [ProyectoController::class, 'download'])->name('proyectos.download');
 
 }); 
 

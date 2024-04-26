@@ -30,9 +30,10 @@
                                     <td>{{ $proyecto->nombre }}</td>
                                     <td>{{ $proyecto->titulo }}</td>
                                     <td>
-                                        <a href="{{ asset('storage/' . $proyecto->archivo) }}" download="{{ $proyecto->nombre }}">
-                                            <img src="https://tse2.mm.bing.net/th?id=OIP.CVX8pDvWQZENIr4TRpZT-gHaHa&pid=Api&P=0&h=180" alt="Icono de descarga" style="width: 30px;">
-                                        </a>
+                                    <a href="{{ route('proyectos.download', $proyecto->id) }}" download="{{ basename($proyecto->archivo) }}">
+    <img src="https://tse2.mm.bing.net/th?id=OIP.CVX8pDvWQZENIr4TRpZT-gHaHa&pid=Api&P=0&h=180" alt="Icono de descarga" style="width: 30px;">
+</a>
+
                                     </td>
                                     <td>
                                         <a href="{{ route('proyectos.edit', $proyecto->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</a>
