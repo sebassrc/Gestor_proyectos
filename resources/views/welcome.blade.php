@@ -52,12 +52,10 @@
             <img src="https://tse3.mm.bing.net/th?id=OIP.urjoQIepLX8u3_AGGiMEjQHaCU&pid=Api&P=0&h=180" alt="cecep.icon">
             <br><br>
        
-<pre style="text-align: center;">La Universidad Icesi es reconocida por su excelencia académica
-y su compromiso con la formación integral de sus estudiantes. Nuestra institución se destaca por 
-ofrecer programas de alta calidad en diversas áreas del conocimiento, brindando oportunidades de 
-aprendizaje innovadoras y relevantes para el desarrollo profesional y personal de nuestra comunidad
-estudiantil. Además, fomentamos la investigación, la innovación y el emprendimiento como pilares 
-fundamentales de nuestra labor educativa. ¡Bienvenido a la Universidad Icesi, donde el conocimiento transforma vidas!</pre>
+<pre style="text-align: center;"> 
+La Universidad Icesi extiende su responsabilidad social hacia la comunidad, desarrollando
+investigaciones y participando en proyectos de intervención real en los
+sectores empresarial, gubernamental, gremial, y las comunidades en general.</pre>
 <br><br>
      
             <a href="{{ route('login') }}" class="login-btn">Login</a>
