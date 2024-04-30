@@ -15,7 +15,7 @@
                     <input type="text" name="nombre" id="nombre" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ $proyecto->nombre }}" />
                 </div>
                 <div class="mb-4">
-                    <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2">Título:</label>
+                    <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2">Grupo:</label>
                     <input type="text" name="titulo" id="titulo" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ $proyecto->titulo }}" />
                 </div>
                 <div class="mb-4">

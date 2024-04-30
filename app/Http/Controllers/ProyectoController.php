@@ -37,16 +37,18 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'archivo' => ['required', 'file', 'mimes:pdf,doc,docx'], // Añade validaciones adicionales si es necesario
+        $request->validate([
+            'archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:2048'], // Validaciones adicionales
         ]);
     
-        $fileName = $request->file('archivo')->getClientOriginalName();
-        $path = $request->file('archivo')->storeAs('images', $fileName, 'public');
-        $requestData = $request->all();
-        $requestData['archivo'] = '/storage/' . $path;
+        $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName(); // Nombre único
+        $path = $request->file('archivo')->storeAs('files', $fileName, 'public'); // Carpeta 'files'
     
-        Proyecto::create($requestData);
+        Proyecto::create([
+            'nombre' => $request->nombre,
+            'titulo' => $request->titulo,
+            'archivo' => '/storage/' . $path,
+        ]);
     
         return redirect('proyectos')->with('flash_message', 'Proyecto Added!');
     }
@@ -73,14 +75,24 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $requestData = $request->all();
+        $request->validate([
+            'archivo' => ['file', 'mimes:pdf,doc,docx', 'max:2048'], // Validaciones adicionales
+        ]);
+
         $proyecto = Proyecto::findOrFail($id);
-        
-        // Verificar si se proporcionó un archivo en la solicitud
+        $requestData = [
+            'nombre' => $request->nombre,
+            'titulo' => $request->titulo,
+        ];
+
+        // Verificar si se proporcionó un nuevo archivo
         if ($request->hasFile('archivo')) {
-            // Procesar el archivo y actualizar el campo 'archivo'
-            $fileName = time() . $request->file('archivo')->getClientOriginalName();
-            $path = $request->file('archivo')->storeAs('images', $fileName, 'public');
+            // Eliminar el archivo antiguo
+            Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
+
+            // Subir el nuevo archivo
+            $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
+            $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
             $requestData['archivo'] = '/storage/' . $path;
         }
     
@@ -100,26 +112,16 @@ class ProyectoController extends Controller
     public function destroy($id)
     {
         $proyecto = Proyecto::findOrFail($id);
+        Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo)); // Eliminar el archivo
         $proyecto->delete();
         return redirect('proyectos')->with('flash_message', 'Proyecto Deleted!');
     }
-
-    /**
-     * Download the specified file.
+        /**
+     * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function download($id)
-    {
-        $proyecto = Proyecto::findOrFail($id);
-        $fileContents = Storage::get($proyecto->archivo);
+
   
-        // Set appropriate headers for download
-        $response = response($fileContents);
-        $response->header('Content-Type', Storage::mimeType($proyecto->archivo));
-        $response->header('Content-Disposition', "attachment;filename=" . $proyecto->nombre);
-  
-        return $response;
-    }
 }

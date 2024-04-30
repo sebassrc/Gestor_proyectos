@@ -12,8 +12,8 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
-                                <h2 class="text-center mb-4">Acerca de la Universidad Icesi</h2>
-                                <p class="text-center lead">¡Bienvenido a la página de gestión de proyectos de la Universidad Icesi!</p>
+                                <img src="https://radcolombia.org/web/sites/default/files/archivos/instituciones/universidad-icesi/logo-icesi.png
+" alt="icesi.con">
                             </div>
                         </div>
 

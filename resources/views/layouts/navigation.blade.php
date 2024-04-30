@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                        <img src="https://tse3.mm.bing.net/th?id=OIP.urjoQIepLX8u3_AGGiMEjQHaCU&pid=Api&P=0&h=180" alt="Dashboard Logo" class="block h-70 w-20 fill-current text-gray-800 dark:text-gray-200" />
+                        <img src="https://radcolombia.org/web/sites/default/files/archivos/instituciones/universidad-icesi/logo-icesi.png" alt="Dashboard Logo" class="block h-70 w-20 fill-current text-gray-800 dark:text-gray-200" />
 
                     </a>
                 </div>
@@ -19,6 +19,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('Proyectos.index')">
                         {{ __('Proyectos') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('files.index')" :active="request()->routeIs('files.index')">
+                        {{ __('Files') }}
                     </x-nav-link>
                 </div>
             </div>

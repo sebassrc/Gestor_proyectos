@@ -5,7 +5,7 @@
     <div class="container mx-auto py-6">
         <div class="max-w-md mx-auto bg-white rounded-md overflow-hidden shadow-md">
             <div class="p-6">
-                <img src="https://tse3.mm.bing.net/th?id=OIP.urjoQIepLX8u3_AGGiMEjQHaCU&pid=Api&P=0&h=180" alt="Universidad Icesi" class="mx-auto mb-6">
+                <img src="https://radcolombia.org/web/sites/default/files/archivos/instituciones/universidad-icesi/logo-icesi.png" alt="Universidad Icesi" class="mx-auto mb-6">
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
