@@ -2,47 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Proyecto;
 
 class ProyectoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private $disk = "public";
+
     public function index()
     {
         $proyectos = Proyecto::all();
         return view('proyectos.index')->with('proyectos', $proyectos);
     }
- 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('proyectos.new');
     }
- 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $request->validate([
-            'archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:2048'], // Validaciones adicionales
+            'archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:2048'],
         ]);
     
-        $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName(); // Nombre único
-        $path = $request->file('archivo')->storeAs('files', $fileName, 'public'); // Carpeta 'files'
+        $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
+        $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
     
         Proyecto::create([
             'nombre' => $request->nombre,
@@ -50,33 +36,19 @@ class ProyectoController extends Controller
             'archivo' => '/storage/' . $path,
         ]);
     
-        return redirect('proyectos')->with('flash_message', 'Proyecto Added!');
+        return redirect('proyectos')->with('flash_message', 'Proyecto agregado correctamente.');
     }
-    
- 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $proyecto = Proyecto::findOrFail($id);
         return view('proyectos.edit')->with('proyecto', $proyecto);
     }
- 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $request->validate([
-            'archivo' => ['file', 'mimes:pdf,doc,docx', 'max:2048'], // Validaciones adicionales
+            'archivo' => ['file', 'mimes:pdf,doc,docx', 'max:2048'],
         ]);
 
         $proyecto = Proyecto::findOrFail($id);
@@ -85,43 +57,69 @@ class ProyectoController extends Controller
             'titulo' => $request->titulo,
         ];
 
-        // Verificar si se proporcionó un nuevo archivo
         if ($request->hasFile('archivo')) {
-            // Eliminar el archivo antiguo
             Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
 
-            // Subir el nuevo archivo
             $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
             $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
             $requestData['archivo'] = '/storage/' . $path;
         }
     
-        // Actualizar los campos del proyecto
         $proyecto->update($requestData);
         
-        return redirect('proyectos')->with('flash_message', 'Proyecto Updated!');
+        return redirect('proyectos')->with('flash_message', 'Proyecto actualizado correctamente.');
     }
-    
- 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         $proyecto = Proyecto::findOrFail($id);
-        Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo)); // Eliminar el archivo
+        Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
         $proyecto->delete();
-        return redirect('proyectos')->with('flash_message', 'Proyecto Deleted!');
+        return redirect('proyectos')->with('flash_message', 'Proyecto eliminado correctamente.');
     }
-        /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
-  
+    public function loadView()
+    {
+        $proyectos = [];
+        foreach (Storage::disk($this->disk)->files() as $file) {
+            $name = str_replace($this->disk . '/', '', $file);
+            $picture = "";
+            $type = Storage::disk($this->disk)->mimeType($name);
+
+            if (strpos($type, "image") !== false) {
+                $picture = asset(Storage::disk($this->disk)->url($name));
+            }
+
+            $downloadLink = route("proyectos.files.download", $name);
+
+            $proyectos[] = [
+                "picture" => $picture,
+                "name" => $name,
+                "link" => $downloadLink,
+                "size" => Storage::disk($this->disk)->size($name)
+            ];
+        }
+
+        return view('proyectos.index')->with('proyectos', $proyectos);
+    }
+
+    public function storeFile(Request $req)
+    {
+        if ($req->isMethod('POST')) {
+            $file = $req->file('file');
+            $name = $req->input('name');
+
+            $file->storeAs('', $name . "." . $file->extension(), $this->disk);
+        }
+        return $this->loadView();
+    }
+
+    public function downloadFile($name)
+    {
+        if (Storage::disk($this->disk)->exists($name)) {
+            return Storage::disk($this->disk)->download($name);
+        }
+
+        return response('', 404);
+    }
 }

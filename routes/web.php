@@ -41,10 +41,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('proyectos.edit');
         Route::put('/{proyecto}', [ProyectoController::class, 'update'])->name('proyectos.update');
         Route::delete('/{proyecto}', [ProyectoController::class, 'destroy'])->name('proyectos.destroy');
-        Route::get('/proyectos/{id}/download', [ProyectoController::class, 'download'])->name('proyectos.download');
-
- 
-
+    
+        Route::get('/files', [ProyectoController::class, 'loadView'])->name('proyectos.files.index');
+        Route::post('/files', [ProyectoController::class, 'storeFile'])->name('proyectos.files.store');
+        Route::get('/files/{name}', [ProyectoController::class, 'downloadFile'])->name('proyectos.files.download');
     });
 });
 

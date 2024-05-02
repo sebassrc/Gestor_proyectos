@@ -24,23 +24,31 @@
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>  <th scope="col">Nombre</th>  <th scope="col">Grupo</th>  <th scope="col">Archivo</th>  <th scope="col">Acciones</th>  </tr>
+                    <th scope="col">#</th>  
+                    <th scope="col">Nombre</th>  
+                    <th scope="col">Grupo</th>  
+                    <th scope="col">Archivo</th>  
+                    <th scope="col">Acciones</th>  
+                  </tr>
                 </thead>
                 <tbody>
                   @foreach ($proyectos as $proyecto)
                     <tr>
                       <td>{{ $loop->iteration }}</td>
-                      <td class="text-primary">  {{ $proyecto->nombre }}</td>  <td>{{ $proyecto->titulo }}</td>
+                      <td class="text-primary">{{ $proyecto->nombre }}</td>  
+                      <td>{{ $proyecto->titulo }}</td>
                       <td>
-                        <a href="{{ route('proyectos.download', $proyecto->id) }}" download="{{ basename($proyecto->archivo) }}">
+                        <a href="{{ $proyecto->archivo }}" download="{{ basename($proyecto->archivo) }}">
                           <img src="https://cdn.icon-icons.com/icons2/272/PNG/512/Downloads_29996.png" alt="Icono de descarga" style="width: 30px;">
                         </a>
                       </td>
                       <td>
-                        <a href="{{ route('proyectos.edit', $proyecto->id) }}" class="btn btn-outline-primary">Editar</a>  <form action="{{ route('proyectos.destroy', $proyecto->id) }}" method="POST" style="display: inline;">
+                        <a href="{{ route('proyectos.edit', $proyecto->id) }}" class="btn btn-outline-primary">Editar</a>  
+                        <form action="{{ route('proyectos.destroy', $proyecto->id) }}" method="POST" style="display: inline;">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">Eliminar</button>  </form>
+                          <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">Eliminar</button>  
+                        </form>
                       </td>
                     </tr>
                   @endforeach
