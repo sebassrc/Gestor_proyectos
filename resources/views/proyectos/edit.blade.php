@@ -6,30 +6,75 @@
     </x-slot>
 
     <div class="container mx-auto py-6">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-            <form action="{{ route('proyectos.update', $proyecto->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="mb-4">
-                    <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
-                    <input type="text" name="nombre" id="nombre" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ $proyecto->nombre }}" />
-                </div>
-                <div class="mb-4">
-                    <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2">Grupo:</label>
-                    <input type="text" name="titulo" id="titulo" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ $proyecto->titulo }}" />
-                </div>
-                <div class="mb-4">
-                    <label for="archivo" class="block text-gray-700 text-sm font-bold mb-2">Archivo:</label>
-                    <input type="file" name="archivo" id="archivo" class="form-input rounded-md shadow-sm mt-1 block w-full" />
-                    <p class="text-xs text-gray-600 mt-1">Si deseas cambiar el archivo, selecciona uno nuevo. De lo contrario, deja este campo vacío.</p>
-                </div>
-                <div class="flex justify-end">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Guardar
-                    </button>
-                </div>
-            </form>
+        <div class="max-w-md mx-auto bg-white rounded-md overflow-hidden shadow-md">
+            <div class="p-6">
+                <form action="{{ route('proyectos.update', $proyecto->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-4">
+                        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
+                        <input type="text" name="nombre" id="nombre" value="{{ $proyecto->nombre }}" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="estado" class="block text-gray-700 text-sm font-bold mb-2">Estado:</label>
+                        <select name="estado" id="estado" class="form-select rounded-md shadow-sm mt-1 block w-full">
+                            <option value="iniciación" {{ $proyecto->estado == 'iniciación' ? 'selected' : '' }}>Iniciación</option>
+                            <option value="detenido" {{ $proyecto->estado == 'detenido' ? 'selected' : '' }}>Detenido</option>
+                            <option value="en-progreso" {{ $proyecto->estado == 'en-progreso' ? 'selected' : '' }}>En progreso</option>
+                            <option value="completado" {{ $proyecto->estado == 'completado' ? 'selected' : '' }}>Completado</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fecha_inicio" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Inicio:</label>
+                        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ $proyecto->fecha_inicio }}" class="form-input rounded-md shadow-sm mt-1 block w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="fecha_final" class="block text-gray-700 text-sm font-bold mb-2">Fecha Final:</label>
+                        <input type="date" name="fecha_final" id="fecha_final" value="{{ $proyecto->fecha_final }}" class="form-input rounded-md shadow-sm mt-1 block w-full" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="area" class="block text-gray-700 text-sm font-bold mb-2">Área:</label>
+                        <select name="area" id="area" class="form-select rounded-md shadow-sm mt-1 block w-full">
+                            <option value="Administración de Empresas con énfasis en Negocios Internacionales">Administración de Empresas con énfasis en Negocios Internacionales</option>
+                            <option value="Economía y Negocios Internacionales">Economía y Negocios Internacionales</option>
+                            <option value="Mercadeo Internacional y Publicidad">Mercadeo Internacional y Publicidad</option>
+                            <option value="Finanzas">Finanzas</option>
+                            <option value="Diseño de Medios Interactivos">Diseño de Medios Interactivos</option>
+                            <option value="Diseño Industrial">Diseño Industrial</option>
+                            <option value="Ingeniería de Energía Inteligente">Ingeniería de Energía Inteligente</option>
+                            <option value="Ingeniería Bioquímica">Ingeniería Bioquímica</option>
+                            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Ingeniería Telemática">Ingeniería Telemática</option>
+                            <option value="Biología con Concentraciones en Conservación y Biología Molecular/Biotecnología">Biología con Concentraciones en Conservación y Biología Molecular/Biotecnología</option>
+                            <option value="Química con Énfasis en Bioquímica">Química con Énfasis en Bioquímica</option>
+                            <option value="Química Farmacéutica">Química Farmacéutica</option>
+                            <option value="Antropología">Antropología</option>
+                            <option value="Ciencia Política con Énfasis en Relaciones Internacionales">Ciencia Política con Énfasis en Relaciones Internacionales</option>
+                            <option value="Derecho">Derecho</option>
+                            <option value="Psicología">Psicología</option>
+                            <option value="Música">Música</option>
+                            <option value="Sociología">Sociología</option>
+                            <option value="Comunicación">Comunicación</option>
+                            <option value="Licenciatura en Educación Básica Primaria">Licenciatura en Educación Básica Primaria</option>
+                            <option value="Licenciatura en Literatura y Lengua Castellana">Licenciatura en Literatura y Lengua Castellana</option>
+                            <option value="Licenciatura en Artes con énfasis en Tecnologías para la creación">Licenciatura en Artes con énfasis en Tecnologías para la creación</option>
+                            <option value="Licenciatura en Lenguas Extranjeras con énfasis en Inglés">Licenciatura en Lenguas Extranjeras con énfasis en Inglés</option>
+                            <option value="Licenciatura en Ciencias Sociales">Licenciatura en Ciencias Sociales</option>
+                            <option value="Medicina">Medicina</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="archivo" class="block text-gray-700 text-sm font-bold mb-2">Archivo:</label>
+                        <input type="file" name="archivo" id="archivo" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    @include('footer')
 </x-app-layout>

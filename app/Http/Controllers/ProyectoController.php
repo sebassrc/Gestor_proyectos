@@ -23,21 +23,32 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'archivo' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:2048'],
-        ]);
+        // Crear una nueva instancia del modelo Proyecto
+        $proyecto = new Proyecto();
+        
+        // Asignar los valores del formulario a las propiedades del modelo
+        $proyecto->nombre = $request->nombre;
+        $proyecto->estado = $request->estado;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_final = $request->fecha_final;
+        $proyecto->area = $request->area;
     
-        $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
+        // Establecer un nombre personalizado para el archivo
+        $fileName = 'PROYECTO_' . uniqid() . '.' . $request->file('archivo')->getClientOriginalExtension();
+    
+        // Subir el archivo con el nombre personalizado
         $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
+        $proyecto->archivo = '/storage/' . $path;
     
-        Proyecto::create([
-            'nombre' => $request->nombre,
-            'titulo' => $request->titulo,
-            'archivo' => '/storage/' . $path,
-        ]);
+        // Guardar el modelo en la base de datos
+        $proyecto->save();
     
-        return redirect('proyectos')->with('flash_message', 'Proyecto agregado correctamente.');
+        // Redirigir al usuario al índice de proyectos con un mensaje de éxito
+        return redirect()->route('proyectos.index')->with('flash_message', 'Proyecto agregado correctamente.');
     }
+    
+    
+
 
     public function edit($id)
     {
@@ -47,27 +58,22 @@ class ProyectoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'archivo' => ['file', 'mimes:pdf,doc,docx', 'max:2048'],
-        ]);
-
         $proyecto = Proyecto::findOrFail($id);
-        $requestData = [
-            'nombre' => $request->nombre,
-            'titulo' => $request->titulo,
-        ];
+        $proyecto->nombre = $request->nombre;
+        $proyecto->area = $request->area;
+        $proyecto->estado = $request->estado;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_final = $request->fecha_final;
 
         if ($request->hasFile('archivo')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
-
             $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
             $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
-            $requestData['archivo'] = '/storage/' . $path;
+            $proyecto->archivo = '/storage/' . $path;
         }
-    
-        $proyecto->update($requestData);
-        
-        return redirect('proyectos')->with('flash_message', 'Proyecto actualizado correctamente.');
+
+        $proyecto->save();
+        return redirect('proyectos');
     }
 
     public function destroy($id)
@@ -75,51 +81,44 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($id);
         Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
         $proyecto->delete();
-        return redirect('proyectos')->with('flash_message', 'Proyecto eliminado correctamente.');
+        return redirect('proyectos');
     }
 
+
+    
     public function loadView()
     {
-        $proyectos = [];
-        foreach (Storage::disk($this->disk)->files() as $file) {
-            $name = str_replace($this->disk . '/', '', $file);
-            $picture = "";
-            $type = Storage::disk($this->disk)->mimeType($name);
-
-            if (strpos($type, "image") !== false) {
-                $picture = asset(Storage::disk($this->disk)->url($name));
-            }
-
-            $downloadLink = route("proyectos.files.download", $name);
-
-            $proyectos[] = [
-                "picture" => $picture,
-                "name" => $name,
-                "link" => $downloadLink,
-                "size" => Storage::disk($this->disk)->size($name)
-            ];
-        }
-
+        $proyectos = Proyecto::all();
         return view('proyectos.index')->with('proyectos', $proyectos);
     }
 
     public function storeFile(Request $req)
     {
         if ($req->isMethod('POST')) {
-            $file = $req->file('file');
-            $name = $req->input('name');
-
-            $file->storeAs('', $name . "." . $file->extension(), $this->disk);
+            $fileName = uniqid() . '_' . $req->file('file')->getClientOriginalName();
+            $path = $req->file('file')->storeAs('files', $fileName, $this->disk);
+            
+            // Aquí podrías asociar el archivo al proyecto si es necesario
+            // Ejemplo: $proyecto->archivo = '/storage/' . $path;
         }
         return $this->loadView();
     }
 
-    public function downloadFile($name)
+    public function downloadFile($id)
     {
-        if (Storage::disk($this->disk)->exists($name)) {
-            return Storage::disk($this->disk)->download($name);
+        $proyecto = Proyecto::findOrFail($id);
+    
+        // Obtener el nombre del archivo almacenado en el campo 'archivo' del proyecto
+        $archivoPath = $proyecto->archivo;
+    
+        // Verificar si el archivo existe en el sistema de archivos
+        if (Storage::disk($this->disk)->exists($archivoPath)) {
+            // Descargar el archivo
+            return Storage::disk($this->disk)->download(str_replace('/storage/', '', $archivoPath));
         }
-
+    
+        // Si el archivo no existe, retornar una respuesta HTTP 404 (No encontrado)
         return response('', 404);
     }
 }
+
