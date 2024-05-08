@@ -10,10 +10,16 @@ class ProyectoController extends Controller
 {
     private $disk = "public";
 
+    public function usuarios()
+    {
+        $proyectos = Proyecto::all();
+        return view('proyectos.usuarios', compact('proyectos'));
+    }
+
     public function index()
     {
         $proyectos = Proyecto::all();
-        return view('proyectos.index')->with('proyectos', $proyectos);
+        return view('proyectos.index', compact('proyectos'));
     }
 
     public function create()
@@ -23,33 +29,31 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
-        // Crear una nueva instancia del modelo Proyecto
+        $user = auth()->user(); // Obtener el usuario actualmente autenticado
         $proyecto = new Proyecto();
-        
-        // Asignar los valores del formulario a las propiedades del modelo
+    
+        // Asignar los valores del proyecto
         $proyecto->nombre = $request->nombre;
+        $proyecto->area = $request->area;
         $proyecto->estado = $request->estado;
         $proyecto->fecha_inicio = $request->fecha_inicio;
         $proyecto->fecha_final = $request->fecha_final;
-        $proyecto->area = $request->area;
-    
-        // Establecer un nombre personalizado para el archivo
-        $fileName = 'PROYECTO_' . uniqid() . '.' . $request->file('archivo')->getClientOriginalExtension();
-    
-        // Subir el archivo con el nombre personalizado
-        $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
+        
+        // Subir el archivo y obtener su ruta en el almacenamiento
+        $path = $request->file('archivo')->store('files', $this->disk);
         $proyecto->archivo = '/storage/' . $path;
     
-        // Guardar el modelo en la base de datos
+        // Asignar el usuario al proyecto
+        $proyecto->user_id = $user->id;
+    
+        // Guardar el proyecto en la base de datos
         $proyecto->save();
     
         // Redirigir al usuario al índice de proyectos con un mensaje de éxito
-        return redirect()->route('proyectos.index')->with('flash_message', 'Proyecto agregado correctamente.');
+        return redirect()->route('users.index')->with('flash_message', 'Project added successfully.');
     }
     
     
-
-
     public function edit($id)
     {
         $proyecto = Proyecto::findOrFail($id);
@@ -59,21 +63,12 @@ class ProyectoController extends Controller
     public function update(Request $request, $id)
     {
         $proyecto = Proyecto::findOrFail($id);
-        $proyecto->nombre = $request->nombre;
-        $proyecto->area = $request->area;
         $proyecto->estado = $request->estado;
         $proyecto->fecha_inicio = $request->fecha_inicio;
         $proyecto->fecha_final = $request->fecha_final;
 
-        if ($request->hasFile('archivo')) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
-            $fileName = uniqid() . '_' . $request->file('archivo')->getClientOriginalName();
-            $path = $request->file('archivo')->storeAs('files', $fileName, 'public');
-            $proyecto->archivo = '/storage/' . $path;
-        }
-
         $proyecto->save();
-        return redirect('proyectos');
+        return redirect()->route('users.index')->with('flash_message', 'Project updated successfully.');
     }
 
     public function destroy($id)
@@ -81,8 +76,10 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($id);
         Storage::disk('public')->delete(str_replace('/storage/', '', $proyecto->archivo));
         $proyecto->delete();
-        return redirect('proyectos');
+        return redirect()->route('users.index')->with('flash_message', 'Project deleted successfully.');
     }
+
+
 
 
     

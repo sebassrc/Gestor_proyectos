@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Listado de Proyectos</title>
+  <title>Listado de usuarios</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
@@ -14,20 +14,43 @@
     <img src="https://www.freeiconspng.com/uploads/checklist-icon-blue-blue-checklist-document-19.png" alt="lista"class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
       
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Listado de Proyectos') }}
+        {{ __('Listado de usuarios') }}
       </h2>
     </x-slot>
     <div class="container mt-5">
       <!-- Controles de filtro -->
       <div class="row">
         <div class="col-md-3 mb-3">
-          <label for="filtro-estado" class="form-label">Filtrar por estado:</label>
+          <label for="filtro-estado" class="form-label">Filtrar por area:</label>
           <select id="filtro-estado" class="form-select">
-            <option value="todos">Todos</option>
-            <option value="iniciación">Iniciación</option>
-            <option value="detenido">Detenido</option>
-            <option value="en-progreso">En progreso</option>
-            <option value="completado">Completado</option>
+          <option value="Seleccione área de estudio"></option>
+          <option value="Administración de Empresas con énfasis en Negocios Internacionales">Administración de Empresas con énfasis en Negocios Internacionales</option>
+                        <option value="Economía y Negocios Internacionales">Economía y Negocios Internacionales</option>
+                        <option value="Mercadeo Internacional y Publicidad">Mercadeo Internacional y Publicidad</option>
+                        <option value="Finanzas">Finanzas</option>
+                        <option value="Diseño de Medios Interactivos">Diseño de Medios Interactivos</option>
+                        <option value="Diseño Industrial">Diseño Industrial</option>
+                        <option value="Ingeniería de Energía Inteligente">Ingeniería de Energía Inteligente</option>
+                        <option value="Ingeniería Bioquímica">Ingeniería Bioquímica</option>
+                        <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                        <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                        <option value="Ingeniería Telemática">Ingeniería Telemática</option>
+                        <option value="Biología con Concentraciones en Conservación y Biología Molecular/Biotecnología">Biología con Concentraciones en Conservación y Biología Molecular/Biotecnología</option>
+                        <option value="Química con Énfasis en Bioquímica">Química con Énfasis en Bioquímica</option>
+                        <option value="Química Farmacéutica">Química Farmacéutica</option>
+                        <option value="Antropología">Antropología</option>
+                        <option value="Ciencia Política con Énfasis en Relaciones Internacionales">Ciencia Política con Énfasis en Relaciones Internacionales</option>
+                        <option value="Derecho">Derecho</option>
+                        <option value="Psicología">Psicología</option>
+                        <option value="Música">Música</option>
+                        <option value="Sociología">Sociología</option>
+                        <option value="Comunicación">Comunicación</option>
+                        <option value="Licenciatura en Educación Básica Primaria">Licenciatura en Educación Básica Primaria</option>
+                        <option value="Licenciatura en Literatura y Lengua Castellana">Licenciatura en Literatura y Lengua Castellana</option>
+                        <option value="Licenciatura en Artes con énfasis en Tecnologías para la creación">Licenciatura en Artes con énfasis en Tecnologías para la creación</option>
+                        <option value="Licenciatura en Lenguas Extranjeras con énfasis en Inglés">Licenciatura en Lenguas Extranjeras con énfasis en Inglés</option>
+                        <option value="Licenciatura en Ciencias Sociales">Licenciatura en Ciencias Sociales</option>
+                        <option value="Medicina">Medicina</option>
           </select>
         </div>
         <div class="col-md-8 mb- position-relative">
@@ -45,7 +68,7 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6 text-gray-900">
-            <a href="{{ route('proyectos.create') }}" class="btn btn-outline-primary btn-lg">Subir un proyecto</a> <br>
+            <a href="{{ route('proyectos.create') }}" class="btn btn-outline-primary btn-lg">Agregar Nuevo</a> <br>
             <br>
 
             <div class="table-responsive">
@@ -55,11 +78,6 @@
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Área</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Fecha de Inicio</th>
-                    <th scope="col">Fecha Final</th>
-                    <th scope="col">Archivo</th>
-                    <th scope="col">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,20 +87,7 @@
                     <td class="text-primary">{{ $proyecto->nombre }}</td>
                     <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
                       {{ $proyecto->area }}
-                    </td>
-                    <td>{{ $proyecto->estado }}</td>
-                    <td>{{ $proyecto->fecha_inicio }}</td>
-                    <td>{{ $proyecto->fecha_final }}</td>
-                    <td>
-                      <a href="{{ $proyecto->archivo }}" download="{{ basename($proyecto->archivo) }}">
-                        <img src="https://cdn.icon-icons.com/icons2/272/PNG/512/Downloads_29996.png" alt="Icono de descarga" style="width: 40px;">
-                      </a>
-                    </td>
-                    <td>
-                      <a href="{{ route('proyectos.edit', $proyecto->id) }}" class="btn btn-outline-primary">Editar</a>
-                    
-                    <td>
-                      
+                    </td> 
 
                   </tr>
                   @endforeach
@@ -121,29 +126,6 @@
     });
   </script>
 
-  <!-- Estilos CSS -->
-  <!-- <style>
-    //! Estilos para las filas de la tabla según el estado 
-    .iniciación {
-      background-color: #ffcccc;
-      /* Rojo claro */
-    }
-
-    .detenido {
-      background-color: #ffcccc;
-      /* Rojo claro */
-    }
-
-    .en-progreso {
-      background-color: #ffffcc;
-      /* Amarillo claro */
-    }
-
-    .completado {
-      background-color: #ccffcc;
-      /* Verde claro */
-    }
-  </style> -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

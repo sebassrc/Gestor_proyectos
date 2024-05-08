@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Proyecto extends Model
 {
     use HasFactory;
-    protected $table      = "proyectos"; 
+    protected $table      = "proyectos";
     protected $primaryKey = "id";
-    protected $fillable = ['nombre', 'titulo', 'archivo']; 
-    
+
+
+    // En el modelo Proyecto.php
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

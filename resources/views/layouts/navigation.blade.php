@@ -7,29 +7,50 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <img src="https://radcolombia.org/web/sites/default/files/archivos/instituciones/universidad-icesi/logo-icesi.png" alt="Dashboard Logo" class="block h-70 w-20 fill-current text-gray-800 dark:text-gray-200" />
-
                     </a>
                 </div>
-
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <!--Ruta para home  -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <img src="https://cdn3.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-1/254000/09-512.png" alt="home" class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
                         {{ __('Home') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('Proyectos.index')">
+
+                    <!--Ruta Mis proyectos  -->
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                        <img src="https://tse3.mm.bing.net/th?id=OIP.5HvszV3xV_Tp1_j6W9ZrJwHaFF&pid=Api&P=0&h=180" alt="error" class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
+                        {{ __('Mis Proyectos') }}
+                    </x-nav-link>
+    
+                    @if(auth()->check() && auth()->user()->email === 'admin@gmail.com')//!<!-- Si el usuario está autenticado y su correo es 'admin@gmail.com', muestra estas rutas -->
+
+                    //TODO: <!--Rutas visubles solo para administrador  -->
+
+                    <!--Ruta proyecto (visible para administrador)  -->
+                    <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.index')">
+                        <img src="http://icon-icons.com/icons2/112/PNG/512/folder_blue_18865.png" alt="proyectos" class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
                         {{ __('Proyectos') }}
                     </x-nav-link>
-                  
+
+                    <!--Ruta Usuarios registrados (visible para administrador)  -->
+                    <x-nav-link :href="route('proyectos.usuarios')" :active="request()->routeIs('proyectos.usuarios')">
+                        <img src="https://vectorified.com/images/people-icon-blue-22.png" 
+                        alt="usuarios" class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;"> 
+                        {{ __('Usuarios') }}
+                    </x-nav-link>
+                    
+                    @endif
                 </div>
             </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
+                            <div>
+                                {{ Auth::user()->name }}
+                            </div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -37,7 +58,6 @@
                             </div>
                         </button>
                     </x-slot>
-
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
@@ -47,10 +67,9 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -75,34 +94,32 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('proyectos.index')" :active="request()->routeIs('Proyectos.index')">
-                        {{ __('Proyectos') }}
-            </x-responsive-nav-link>
-        </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+            <!-- Responsive Settings Options -->
+            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                <div class="px-4">
+                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('profile.edit')">
+                        {{ __('Profile') }} 
                     </x-responsive-nav-link>
-                </form>
+
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
+                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                            <img src="https://cdn.pixabay.com/photo/2017/05/29/23/02/logging-out-2355227_960_720.png" 
+                            alt="salir" class="block h-10 w-5 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
+                        </x-responsive-nav-link>
+
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 </nav>
