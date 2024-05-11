@@ -21,6 +21,7 @@ class ProyectoController extends Controller
         $proyectos = Proyecto::all();
         return view('proyectos.index', compact('proyectos'));
     }
+    
 
     public function create()
     {
@@ -31,7 +32,7 @@ class ProyectoController extends Controller
     {
         $user = auth()->user(); // Obtener el usuario actualmente autenticado
         $proyecto = new Proyecto();
-    
+        
         // Asignar los valores del proyecto
         $proyecto->nombre = $request->nombre;
         $proyecto->area = $request->area;
@@ -42,16 +43,17 @@ class ProyectoController extends Controller
         // Subir el archivo y obtener su ruta en el almacenamiento
         $path = $request->file('archivo')->store('files', $this->disk);
         $proyecto->archivo = '/storage/' . $path;
-    
+
         // Asignar el usuario al proyecto
         $proyecto->user_id = $user->id;
-    
+
         // Guardar el proyecto en la base de datos
         $proyecto->save();
-    
+
         // Redirigir al usuario al índice de proyectos con un mensaje de éxito
         return redirect()->route('users.index')->with('flash_message', 'Project added successfully.');
     }
+    
     
     
     public function edit($id)
@@ -68,7 +70,7 @@ class ProyectoController extends Controller
         $proyecto->fecha_final = $request->fecha_final;
 
         $proyecto->save();
-        return redirect()->route('users.index')->with('flash_message', 'Project updated successfully.');
+        return redirect()->route('proyectos.index')->with('flash_message', 'Project updated successfully.');
     }
 
     public function destroy($id)
@@ -111,11 +113,12 @@ class ProyectoController extends Controller
         // Verificar si el archivo existe en el sistema de archivos
         if (Storage::disk($this->disk)->exists($archivoPath)) {
             // Descargar el archivo
-            return Storage::disk($this->disk)->download(str_replace('/storage/', '', $archivoPath));
+            return Storage::disk($this->disk)->download(str_replace('/storage/', '', $archivoPath), $proyecto->nombre);
         }
     
         // Si el archivo no existe, retornar una respuesta HTTP 404 (No encontrado)
         return response('', 404);
     }
+
 }
 

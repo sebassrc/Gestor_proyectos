@@ -43,15 +43,32 @@ class UserController extends Controller
         return view('users.edit')->with('proyecto', $proyecto);
     }
 
-    public function update(Request $request, $id)
-    {
-        $user = auth()->user();
-        $proyecto = $user->proyectos()->findOrFail($id);
-
-        $proyecto->update($request->all());
-
-        return redirect()->route('users.index')->with('flash_message', 'Project updated successfully.');
+   public function update(Request $request, $id)
+{
+    $user = auth()->user();
+    $proyecto = $user->proyectos()->findOrFail($id);
+    
+    // Verifica si se ha enviado el archivo
+    if ($request->hasFile('archivo')) {
+        // Actualiza el archivo solo si se ha enviado uno nuevo
+        $proyecto->archivo = $request->archivo;
     }
+
+    // Actualiza otros campos si están presentes en la solicitud
+    if ($request->has('nombre')) {
+        $proyecto->nombre = $request->nombre;
+    }
+    if ($request->has('area')) {
+        $proyecto->area = $request->area;
+    }
+
+    // Guarda el proyecto
+    $proyecto->save();
+
+    return redirect()->route('users.index')->with('flash_message', 'Proyecto actualizado exitosamente.');
+}
+
+
 
     public function destroy($id)
     {

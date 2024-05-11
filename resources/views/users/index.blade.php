@@ -105,7 +105,7 @@
                       @endif
                     </td>
                     <td>
-                      <a href="{{ route('proyectos.edit', $proyecto->id) }}" class="btn btn-outline-primary">Editar</a>
+                      <a href="{{ route('users.edit', $proyecto->id) }}" class="btn btn-outline-primary">Editar</a>
                       <form action="{{ route('proyectos.destroy', $proyecto->id) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')

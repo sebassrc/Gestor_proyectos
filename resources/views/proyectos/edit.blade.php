@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-    <img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/698873-icon-136-document-edit-512.png" alt="editar" class="h-30 w-10 fill-current text-gray-800 dark:text-gray-200 mr-4" />
+        <img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/698873-icon-136-document-edit-512.png" alt="editar" class="h-30 w-10 fill-current text-gray-800 dark:text-gray-200 mr-4" />
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Editar proyecto') }}
         </h2>
@@ -44,6 +44,9 @@
                     </div>
 
                     <div class="flex justify-center mt-4">
+                        <a href="{{ route('proyectos.index') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none mr-2">
+                            Cancelar
+                        </a>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none">
                             Guardar
                         </button>

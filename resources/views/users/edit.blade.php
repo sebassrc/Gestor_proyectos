@@ -3,19 +3,19 @@
         <img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/698873-icon-136-document-edit-512.png"
          alt="editar" class="block h-30 w-10 fill-current text-gray-800 dark:text-gray-200" style="margin-right: 5px;">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar usuario') }}
+            {{ __('Editar proyecto subido') }}
         </h2>
     </x-slot>
 
     <div class="container mx-auto py-6">
         <div class="max-w-md mx-auto bg-white rounded-md overflow-hidden shadow-md">
             <div class="p-6">
-                <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('users.update', $proyecto->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
-                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
-                        <input type="text" name="name" id="name" value="{{ $user->name }}" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" />
+                        <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
+                        <input type="text" name="nombre" id="nombre" value="{{ $proyecto->nombre }}" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" />
                     </div>
 
                     <div class="mb-4">
@@ -53,24 +53,26 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Estado:</label>
-                        <input type="text" value="{{ $user->estado }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
+                        <input type="text" value="{{ $proyecto->estado }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Inicio:</label>
-                        <input type="text" value="{{ $user->fecha_inicio }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
+                        <input type="text" value="{{ $proyecto->fecha_inicio }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Fecha Final:</label>
-                        <input type="text" value="{{ $user->fecha_final }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
+                        <input type="text" value="{{ $proyecto->fecha_final }}" disabled class="form-input rounded-md shadow-sm mt-1 block w-full bg-gray-100">
                     </div>
 
                     <div class="mb-4">
                         <label for="archivo" class="block text-gray-700 text-sm font-bold mb-2">Archivo:</label>
                         <input type="file" name="archivo" id="archivo" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" />
                     </div>
-
                     <div class="flex justify-center mt-4">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none">
+                    <a href="{{ route('users.index') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none mr-2">
+                            Cancelar
+                        </a>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none">
                             Guardar
                         </button>
                     </div>

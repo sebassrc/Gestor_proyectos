@@ -37,6 +37,7 @@
                         <label for="area" class="block text-gray-700 text-sm font-bold mb-2">Área:</label>
                         <select name="area" id="area" class="form-select rounded-md shadow-sm mt-1 block w-full" required autocomplete="area">
                         <option value="">Seleccione área de estudio</option>
+              <option value="Administración de Empresas con énfasis en Negocios Internacionales">Administrador de proyectos</option>
               <option value="Administración de Empresas con énfasis en Negocios Internacionales">Administración de Empresas con énfasis en Negocios Internacionales</option>
               <option value="Economía y Negocios Internacionales">Economía y Negocios Internacionales</option>
               <option value="Mercadeo Internacional y Publicidad">Mercadeo Internacional y Publicidad</option>
@@ -71,9 +72,13 @@
                         <input type="file" name="archivo" id="archivo" class="form-input rounded-md shadow-sm mt-1 block w-full focus:ring-indigo-500 focus:border-indigo-500" required autocomplete="off" />
                     </div>
                     <div class="flex justify-center mt-4">
+                    <a href="{{ route('users.index') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none mr-2">
+                            Cancelar
+                        </a>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center appearance-none">
                             Subir proyecto
                         </button>
+                        
                     </div>
                 </form>
             </div>

@@ -23,9 +23,10 @@
                         {{ __('Mis Proyectos') }}
                     </x-nav-link>
     
-                    @if(auth()->check() && auth()->user()->email === 'admin@gmail.com')//!<!-- Si el usuario está autenticado y su correo es 'admin@gmail.com', muestra estas rutas -->
+                    <!-- Si el usuario está autenticado y su correo es 'admin@gmail.com', muestra estas rutas -->
 
-                    //TODO: <!--Rutas visubles solo para administrador  -->
+                    <!--Rutas visubles solo para administrador  -->
+                    @if(auth()->check() && auth()->user()->email === 'admin@gmail.com')
 
                     <!--Ruta proyecto (visible para administrador)  -->
                     <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.index')">
