@@ -11,5 +11,8 @@ class Proyecto extends Model
     protected $table      = "proyectos"; 
     protected $primaryKey = "id";
     protected $fillable = ['nombre', 'titulo', 'archivo']; 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
